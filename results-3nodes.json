@@ -1,0 +1,42 @@
+{
+  "timestamp": "2025-09-19T11:50:24.216557",
+  "compose_file": "docker-compose-generated.yml",
+  "quick_mode": true,
+  "sequential_writes": {
+    "total_operations": 100,
+    "successful_operations": 100,
+    "failed_operations": 0,
+    "duration_seconds": 4.3954548835754395,
+    "operations_per_second": 22.750773844516402,
+    "average_latency_ms": 43.954548835754395
+  },
+  "sequential_reads": {
+    "total_operations": 100,
+    "successful_operations": 100,
+    "failed_operations": 0,
+    "duration_seconds": 4.0856921672821045,
+    "operations_per_second": 24.47565697699694,
+    "average_latency_ms": 40.856921672821045
+  },
+  "concurrent_writes": {
+    "total_operations": 100,
+    "successful_operations": 100,
+    "failed_operations": 0,
+    "duration_seconds": 1.3289380073547363,
+    "operations_per_second": 75.24805479756797,
+    "concurrency": 5,
+    "average_latency_ms": 13.289380073547363
+  },
+  "mixed_workload": {
+    "duration_seconds": 10.009650945663452,
+    "total_operations": 132,
+    "read_operations": 93,
+    "write_operations": 39,
+    "read_failures": 0,
+    "write_failures": 0,
+    "total_operations_per_second": 13.187273034449541,
+    "read_ops_per_second": 9.291033274271268,
+    "write_ops_per_second": 3.8962397601782737,
+    "read_ratio_actual": 0.7045454545454546
+  }
+}
