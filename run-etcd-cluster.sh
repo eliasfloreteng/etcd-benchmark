@@ -67,12 +67,8 @@ start_etcd_nodes() {
     
     for ((i=1; i<=num_nodes; i++)); do
         local node_name="etcd-node-$i"
-        local data_dir="/tmp/etcd-data-$i"
         local client_port=$((2378 + i))
         local peer_port=$((2389 + i))
-        
-        # Create data directory
-        mkdir -p $data_dir
         
         echo "Starting $node_name on client port $client_port, peer port $peer_port"
         
@@ -81,11 +77,9 @@ start_etcd_nodes() {
             --network $NETWORK_NAME \
             -p $client_port:2379 \
             -p $peer_port:2380 \
-            --mount type=bind,source=$data_dir,destination=/etcd-data \
             $ETCD_IMAGE \
             /usr/local/bin/etcd \
             --name $node_name \
-            --data-dir /etcd-data \
             --listen-client-urls http://0.0.0.0:2379 \
             --advertise-client-urls http://$node_name:2379 \
             --listen-peer-urls http://0.0.0.0:2380 \
