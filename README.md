@@ -140,12 +140,86 @@ docker network rm etcd-network
 rm -rf /tmp/etcd-data-*
 ```
 
+## Benchmarking the Cluster
+
+### Python Benchmark Script
+
+The repository includes a comprehensive Python benchmark tool:
+
+```bash
+# Install Python dependencies first
+pip3 install -r requirements.txt
+
+# Run benchmark with auto-detection of cluster nodes
+python3 benchmark-etcd-cluster.py
+
+# Run with specific parameters
+python3 benchmark-etcd-cluster.py --clients 20 --duration 60 --write-ratio 0.5
+
+# Save results to JSON file
+python3 benchmark-etcd-cluster.py --output benchmark-results.json
+```
+
+#### Benchmark Features
+
+- **Auto-detection**: Automatically discovers running etcd nodes
+- **Multiple Clients**: Concurrent client simulation (configurable)
+- **Mixed Workloads**: Configurable read/write ratios
+- **Comprehensive Metrics**: Throughput, latency percentiles, error rates
+- **Load Distribution**: Shows how requests are distributed across nodes
+- **JSON Export**: Save detailed results for analysis
+
+#### Benchmark Options
+
+```bash
+# Basic options
+--clients, -c          Number of concurrent clients (default: 10)
+--duration, -d         Benchmark duration in seconds (default: 30)
+--write-ratio, -w      Ratio of write operations 0.0-1.0 (default: 0.3)
+
+# Data size options
+--key-size             Key size in bytes (default: 64)
+--value-size           Value size in bytes (default: 1024)
+--key-prefix           Key prefix for benchmark (default: benchmark)
+
+# Connection options
+--endpoints, -e        Specific etcd endpoints (auto-detected if not provided)
+--warmup-time          Warmup time in seconds (default: 5)
+
+# Output options
+--output, -o           Save results to JSON file
+```
+
+#### Example Usage
+
+```bash
+# Quick benchmark with default settings
+./benchmark-etcd-cluster.py
+
+# Heavy write load test
+./benchmark-etcd-cluster.py --clients 50 --write-ratio 0.8 --duration 120
+
+# Large value benchmark
+./benchmark-etcd-cluster.py --value-size 4096 --clients 5 --duration 60
+
+# Specific endpoints
+./benchmark-etcd-cluster.py --endpoints http://localhost:2379 http://localhost:2380 http://localhost:2381
+```
+
+### Prerequisites for Benchmarking
+
+- Python 3.7+
+- `etcd3` Python library (`pip3 install -r requirements.txt`)
+- Running etcd cluster (use `run-etcd-cluster.sh` to start)
+
 ## File Structure
 
 ```
 .
-├── run-etcd-cluster.sh    # Main script
-└── README.md             # This documentation
+├── run-etcd-cluster.sh      # Cluster deployment script
+├── benchmark-etcd-cluster.py # Python benchmark tool
+├── requirements.txt         # Python dependencies
+└── README.md               # This documentation
 ```
 
 ## License
