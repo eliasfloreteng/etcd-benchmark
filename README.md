@@ -209,8 +209,57 @@ python3 benchmark-etcd-cluster.py --output benchmark-results.json
 ### Prerequisites for Benchmarking
 
 - Python 3.7+
-- `etcd3` Python library (`pip3 install -r requirements.txt`)
+- `etcd3` and `matplotlib` Python libraries (`pip3 install -r requirements.txt`)
 - Running etcd cluster (use `run-etcd-cluster.sh` to start)
+
+### Analyzing Results
+
+After running benchmarks with different node counts, use the plotting script to visualize performance:
+
+```bash
+# Run benchmarks for different node counts
+python3 benchmark-etcd-cluster.py --duration 30 --clients 10 --output 1-nodes.json
+python3 benchmark-etcd-cluster.py --duration 30 --clients 10 --output 2-nodes.json
+# ... continue for more nodes
+
+# Generate performance analysis plots (multiple ways)
+python3 plot-results.py                              # Auto-detect *-nodes.json files
+python3 plot-results.py *.json                       # Use glob patterns
+python3 plot-results.py 1-nodes.json 3-nodes.json   # Specific files
+python3 plot-results.py --output custom-plot.png    # Custom output filename
+python3 plot-results.py --no-display               # Save only, don't show
+```
+
+#### Advanced Plot Usage
+
+```bash
+# Plot specific subset of results
+python3 plot-results.py 1-nodes.json 5-nodes.json 10-nodes.json
+
+# Use different naming convention
+python3 plot-results.py benchmark-*.json
+
+# Create multiple plots with different outputs
+python3 plot-results.py 1-nodes.json 2-nodes.json 3-nodes.json --output small-cluster.png
+python3 plot-results.py 8-nodes.json 9-nodes.json 10-nodes.json --output large-cluster.png
+
+# Batch processing without display (for CI/CD)
+python3 plot-results.py "*-nodes.json" --no-display --output results.png
+```
+
+#### Plot Features
+
+The plotting script generates a comprehensive 4-panel analysis:
+
+1. **Throughput vs Nodes**: Shows total, read, and write throughput scaling
+2. **Latency vs Nodes**: Displays average, P95, and P99 latency trends
+3. **Scaling Efficiency**: Shows how well the cluster scales compared to perfect linear scaling
+4. **Load Distribution**: Operations per node to understand load balancing
+
+**Output Files:**
+
+- `etcd-performance-analysis.png` - High-resolution performance plots
+- Console summary with key metrics and recommendations
 
 ## File Structure
 
@@ -218,6 +267,7 @@ python3 benchmark-etcd-cluster.py --output benchmark-results.json
 .
 ├── run-etcd-cluster.sh      # Cluster deployment script
 ├── benchmark-etcd-cluster.py # Python benchmark tool
+├── plot-results.py          # Performance analysis and plotting
 ├── requirements.txt         # Python dependencies
 └── README.md               # This documentation
 ```
